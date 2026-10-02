@@ -6,7 +6,6 @@ namespace InvoiceApp;
 class Program
 {
     
-    static int indx = -1;
     static Receipts receipt = new ();
     static Customer customer = new ()
     {
@@ -61,7 +60,6 @@ class Program
                         DisplayItems();
                         break;
                     case "b":
-                        indx++;
                         OrderItems();
                         break;
                     case "k":
@@ -135,17 +133,20 @@ class Program
             if (item.ItemNo == ItemOrdered)
             {
                 ItemExists=true;
-                
-                if (item.Quantity < QuantityOrdered)
+                if (ItemExists)
                 {
-                    throw new Exception("Tillgänglig kvantitet är otillräcklig.");
+                    if (item.Quantity < QuantityOrdered)
+                    {
+                        throw new Exception("Tillgänglig kvantitet är otillräcklig.");
+                    }
+                    orderedItems.Add (new Items 
+                        { 
+                        ItemNo = ItemOrdered,
+                        Quantity = QuantityOrdered,
+                        Description = item.Description,
+                        UnitPrice = item.UnitPrice});
+                    break;
                 }
-                orderedItems.Add (new Items 
-                    { 
-                    ItemNo = ItemOrdered,
-                    Quantity = QuantityOrdered});
-                orderedItems[indx].Description = item.Description;
-                orderedItems[indx].UnitPrice = item.UnitPrice;
             }
         }
         if (ItemExists == false)
